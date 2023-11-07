@@ -1,3 +1,4 @@
+import 'package:spotify_login/HomePage.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,7 @@ class SpotifyLoginScreen extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            _loginToSpotify();
+            _loginToSpotify(context); //Pasar el contexto aquí
           },
           child: Text('Login with Spotify'),
         ),
@@ -31,9 +32,9 @@ class SpotifyLoginScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _loginToSpotify() async {
+  Future<void> _loginToSpotify(BuildContext context) async {
     String clientId = '6c83e4fddc0e4e46bb66d6defcae149e';
-    String redirectUrl = 'http://localhost:3000/spotify_login';
+    String redirectUrl = 'spotify_login://main';
 
     try {
       await SpotifySdk.connectToSpotifyRemote(
@@ -42,6 +43,10 @@ class SpotifyLoginScreen extends StatelessWidget {
         // Resto de los parámetros opcionales
       );
       // Acciones después de iniciar sesión correctamente
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
     } catch (e) {
       // Manejo de errores
       print('Error al iniciar sesión en Spotify: $e');
